@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>MeetNotes AI — Settings</title>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body class="options">
+  <div class="container">
+    <h1>Meet<span>Notes</span> AI <span style="color:var(--text-muted);font-weight:400;font-size:14px;">/ Settings</span></h1>
+
+    <!-- API Key -->
+    <div class="card">
+      <h2>Claude API Key</h2>
+      <div>
+        <label for="api-key">Your API Key</label>
+        <input type="password" id="api-key" placeholder="sk-ant-..." autocomplete="off" />
+      </div>
+      <p class="hint">
+        Your key is stored locally in <code>chrome.storage.sync</code> and never sent anywhere except directly to Anthropic's API.
+        Get a key at <a href="https://console.anthropic.com" target="_blank">console.anthropic.com →</a>
+      </p>
+    </div>
+
+    <!-- Preferences -->
+    <div class="card">
+      <h2>Preferences</h2>
+      <div>
+        <label for="lang">Transcription Language</label>
+        <select id="lang">
+          <option value="en-US">English (US)</option>
+          <option value="en-GB">English (UK)</option>
+          <option value="sw-KE">Swahili (Kenya)</option>
+          <option value="fr-FR">French</option>
+          <option value="es-ES">Spanish</option>
+          <option value="de-DE">German</option>
+        </select>
+      </div>
+      <div>
+        <label for="summary-style">Summary Style</label>
+        <select id="summary-style">
+          <option value="structured">Structured (decisions + action items)</option>
+          <option value="brief">Brief (3-sentence overview)</option>
+          <option value="bullets">Bullet Points Only</option>
+          <option value="detailed">Detailed</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- Save -->
+    <div class="row">
+      <button class="btn btn-primary" id="btn-save">Save Settings</button>
+      <button class="btn btn-ghost" id="btn-clear-data">Clear All Data</button>
+    </div>
+
+    <div class="toast" id="toast"></div>
+  </div>
+
+  <script>
+    const apiKeyInput     = document.getElementById("api-key");
+    const langSelect      = document.getElementById("lang");
+    const styleSelect     = document.getElementById("summary-style");
+    const btnSave         = document.getElementById("btn-save");
+    const btnClearData    = document.getElementById("btn-clear-data");
+    const toast           = document.getElementById("toast");
+
+    // Load saved settings
+    chrome.storage.sync.get(["apiKey", "lang", "summaryStyle"], (data) => {
+      if (data.apiKey) apiKeyInput.value = data.apiKey;
+      if (data.lang) langSelect.value = data.lang;
+      if (data.summaryStyle) styleSelect.value = data.summaryStyle;
+    });
+
+    btnSave.addEventListener("click", () => {
+      const apiKey = apiKeyInput.value.trim();
+
+      if (!apiKey) {
+        showToast("API key cannot be empty.", true);
+        return;
+      }
+
+      if (!apiKey.startsWith("sk-ant-")) {
+        showToast("That doesn't look like a valid Claude API key.", true);
+        return;
+      }
+
+      chrome.storage.sync.set({
+        apiKey,
+        lang: langSelect.value,
+        summaryStyle: styleSelect.value,
+      }, () => {
+        showToast("Settings saved.");
+      });
+    });
+
+    btnClearData.addEventListener("click", () => {
+      if (!confirm("Clear all stored data (transcripts, notes, settings)?")) return;
+      chrome.storage.sync.clear();
+      chrome.storage.local.clear();
+      apiKeyInput.value = "";
+      showToast("All data cleared.");
+    });
+
+    function showToast(msg, isError = false) {
+      toast.textContent = msg;
+      toast.className = "toast" + (isError ? " error" : "");
+      toast.style.display = "block";
+      setTimeout(() => (toast.style.display = "none"), 3000);
+    }
+  </script>
+</body>
+</html>

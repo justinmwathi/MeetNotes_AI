@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>MeetNotes AI</title>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body class="popup">
+  <div class="header">
+    <div class="logo-letter">M</div>
+    <div class="title">Meet<span>Notes</span> AI</div>
+  </div>
+
+  <div class="status">
+    <div class="dot" id="status-dot"></div>
+    <span id="status-text">No active meeting</span>
+  </div>
+
+  <div class="stat">
+    <span>Lines transcribed</span>
+    <span id="transcript-count">0</span>
+  </div>
+
+  <div class="actions">
+    <button class="btn btn-primary btn-block" id="btn-open-panel">Open Notes Panel</button>
+    <button class="btn btn-ghost btn-block" id="btn-summarise" disabled>Summarise Now</button>
+  </div>
+
+  <div class="divider"></div>
+
+  <div class="settings-row">
+    <a class="settings-link" href="options.html" target="_blank">
+      ⚙ Settings
+    </a>
+  </div>
+
+  <script src="popup.js"></script>
+</body>
+</html>

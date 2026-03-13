@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MeetNotes AI</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Mono:ital,wght@0,300;0,400;0,500;1,400&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body class="sidepanel">
+
+  <!-- Header -->
+  <header>
+    <div class="logo">
+      <svg viewBox="0 0 24 24" fill="currentColor">
+        <path d="M12 2a3 3 0 0 1 3 3v6a3 3 0 0 1-6 0V5a3 3 0 0 1 3-3zm6.5 8a.5.5 0 0 1 .5.5A7 7 0 0 1 12.5 17v2.5H15a.5.5 0 0 1 0 1H9a.5.5 0 0 1 0-1h2.5V17A7 7 0 0 1 5 10.5a.5.5 0 0 1 1 0A6 6 0 0 0 18 10.5a.5.5 0 0 1 .5-.5z"/>
+      </svg>
+    </div>
+    <div class="logo-text">Meet<span>Notes</span> AI</div>
+    <a href="options.html" target="_blank" title="Settings" style="color:var(--text-muted); display:flex;">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/>
+      </svg>
+    </a>
+  </header>
+
+  <!-- Status Bar -->
+  <div class="status-bar">
+    <div class="dot" id="status-dot"></div>
+    <span id="status-text">Waiting for Google Meet...</span>
+    <span id="timer"></span>
+  </div>
+
+  <!-- Tabs -->
+  <div class="tabs">
+    <button class="tab active" data-tab="transcript">Transcript</button>
+    <button class="tab" data-tab="summary">Summary</button>
+  </div>
+
+  <!-- Main -->
+  <main>
+    <!-- Transcript Panel -->
+    <div class="panel active" id="panel-transcript">
+      <div class="transcript-empty" id="transcript-empty">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+          <path d="M12 2a3 3 0 0 1 3 3v6a3 3 0 0 1-6 0V5a3 3 0 0 1 3-3z"/>
+          <path d="M19 10a7 7 0 0 1-14 0"/>
+          <line x1="12" y1="19" x2="12" y2="22"/>
+          <line x1="8" y1="22" x2="16" y2="22"/>
+        </svg>
+        <p>Transcript will appear here once your meeting starts and recording begins.</p>
+      </div>
+      <div id="transcript-list" style="display:none; display:flex; flex-direction:column; gap:8px;"></div>
+    </div>
+
+    <!-- Summary Panel -->
+    <div class="panel" id="panel-summary">
+      <div class="summary-empty" id="summary-empty">
+        <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="opacity:0.25">
+          <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/>
+        </svg>
+        <p style="font-size:12px; color:var(--text-muted); max-width:200px; line-height:1.7">Click <strong style="color:var(--text-dim)">Summarise</strong> to generate AI notes from your transcript.</p>
+      </div>
+      <div id="summary-content" style="display:none;" class="summary-content"></div>
+      <div id="summary-error" style="display:none;"></div>
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer>
+    <button class="btn btn-primary" id="btn-summarise" disabled>
+      <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a3 3 0 0 1 3 3v6a3 3 0 0 1-6 0V5a3 3 0 0 1 3-3z"/></svg>
+      Summarise
+    </button>
+    <button class="btn btn-ghost" id="btn-copy" style="display:none;">
+      Copy Notes
+    </button>
+    <div class="spacer"></div>
+    <button class="btn btn-danger" id="btn-clear">Clear</button>
+  </footer>
+
+  <script src="sidepanel.js"></script>
+</body>
+</html>
