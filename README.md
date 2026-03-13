@@ -27,7 +27,7 @@ meet-notes-extension/
 ├── popup.html          # Toolbar popup
 ├── popup.js            # Popup logic
 ├── options.html        # Settings page (API key, language, summary style)
-└── icons/              # Extension icons (add icon16.png, icon48.png, icon128.png)
+└── icons/              # Extension icons
 ```
 
 ---
