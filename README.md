@@ -73,17 +73,7 @@ sidepanel.js            Renders transcript and notes in real time
 
 ---
 
-## Extending This
 
-Some ideas for next steps:
-
-- **Whisper API** — replace Web Speech API for better accuracy and multilingual support
-- **Speaker diarisation** — label who said what (requires audio processing)
-- **Export to Notion / Google Docs** — add a one-click export button
-- **Email summary** — send notes to participants after the call
-- **Custom prompts** — let users define what the AI should extract
-
----
 
 ## Permissions Used
 
