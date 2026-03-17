@@ -174,7 +174,7 @@ async function summariseMeeting() {
   const { apiKey } = await chrome.storage.sync.get("apiKey");
 
   if (!apiKey) {
-    return { error: "No API key set. Go to Settings to add your Claude API key." };
+    return { error: "No API key set. Add your OpenAI API key in Settings." };
   }
 
   const transcriptText = meetingState.transcript
@@ -194,29 +194,28 @@ async function summariseMeeting() {
 
 Please extract and structure the following:
 
-1. **Meeting Summary** — 2–3 sentence overview of what was discussed
-2. **Key Decisions** — bullet list of decisions made
-3. **Action Items** — bullet list of tasks, with owner name if mentioned (format: "[ ] Task — Owner")
-4. **Key Points** — most important topics or ideas raised
-5. **Open Questions** — anything left unresolved
+1. Meeting Summary — 2–3 sentence overview
+2. Key Decisions — bullet list
+3. Action Items — bullet list with owners
+4. Key Points
+5. Open Questions
 
-Be concise. If something is not mentioned, skip that section.
+Be concise.
 
 TRANSCRIPT:
 ${transcriptText}`;
 
   try {
-    const response = await fetch("https://api.anthropic.com/v1/messages", {
+    const response = await fetch("https://api.openai.com/v1/responses", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        "x-api-key": apiKey,
-        "anthropic-version": "2023-06-01",
+        "Authorization": `Bearer ${apiKey}`,   // ✅ FIXED HEADER
       },
       body: JSON.stringify({
-        model: "claude-opus-4-20250514",
-        max_tokens: 1000,
-        messages: [{ role: "user", content: prompt }],
+        model: "gpt-4.1-mini",   // ✅ lightweight + cheap + good for summaries
+        input: prompt,
+        max_output_tokens: 1000,
       }),
     });
 
@@ -226,18 +225,22 @@ ${transcriptText}`;
     }
 
     const data = await response.json();
-    const summary = data.content[0]?.text || "No summary returned.";
 
-    // Save summary to storage
+    const summary =
+      data.output?.[0]?.content?.[0]?.text || "No summary returned.";
+
+    // Save summary
     const saved = {
       summary,
       transcript: meetingState.transcript,
       startTime: meetingState.startTime,
       generatedAt: Date.now(),
     };
+
     await chrome.storage.local.set({ lastMeeting: saved });
 
     broadcastToUI({ type: "SUMMARY_READY", summary });
+
     return { summary };
 
   } catch (err) {
