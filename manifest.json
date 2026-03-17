@@ -1,5 +1,9 @@
 {
   "manifest_version": 3,
+  "options_ui": {
+    "page": "options.html",
+    "open_in_tab": true
+  },
   "name": "MeetNotes AI",
   "version": "1.0.0",
   "description": "AI-powered note taker for Google Meet. Transcribes your meetings and generates smart summaries.",
@@ -39,6 +43,7 @@
       "128": "icons/icon128.png"
     }
   },
+  
 
   "side_panel": {
     "default_path": "sidepanel.html"
