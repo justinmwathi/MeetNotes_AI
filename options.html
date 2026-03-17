@@ -8,18 +8,25 @@
 </head>
 <body class="options">
   <div class="container">
-    <h1>Meet<span>Notes</span> AI <span style="color:var(--text-muted);font-weight:400;font-size:14px;">/ Settings</span></h1>
+    <h1>Meet<span>Notes</span> AI 
+      <span style="color:var(--text-muted);font-weight:400;font-size:14px;">
+        / Settings
+      </span>
+    </h1>
 
     <!-- API Key -->
     <div class="card">
-      <h2>Claude API Key</h2>
+      <h2>OpenAI API Key</h2>
       <div>
         <label for="api-key">Your API Key</label>
-        <input type="password" id="api-key" placeholder="sk-ant-..." autocomplete="off" />
+        <input type="password" id="api-key" placeholder="sk-..." autocomplete="off" />
       </div>
       <p class="hint">
-        Your key is stored locally in <code>chrome.storage.sync</code> and never sent anywhere except directly to Anthropic's API.
-        Get a key at <a href="https://console.anthropic.com" target="_blank">console.anthropic.com →</a>
+        Your key is stored locally in <code>chrome.storage.sync</code> and only used to call OpenAI’s API.
+        Get a key at 
+        <a href="https://platform.openai.com/api-keys" target="_blank">
+          platform.openai.com →
+        </a>
       </p>
     </div>
 
@@ -80,8 +87,9 @@
         return;
       }
 
-      if (!apiKey.startsWith("sk-ant-")) {
-        showToast("That doesn't look like a valid Claude API key.", true);
+      // ✅ Updated validation for OpenAI
+      if (!apiKey.startsWith("sk-")) {
+        showToast("That doesn't look like a valid OpenAI API key.", true);
         return;
       }
 
